@@ -13,10 +13,10 @@ parser.add_argument('--port', help="SAJ Inverter Port",
 
 args = parser.parse_args()
 
-address = 36608
+address = 36608 # First register with Inverter details.
 count = 29
 connected = False
-client = ModbusTcpClient(host=host, port=port, timeout=5)
+client = ModbusTcpClient(host=args.host, port=args.port, timeout=5)
 client.connect()
 
 try:
