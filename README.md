@@ -1,2 +1,2 @@
 # saj_modbus
-Python SAJ Invert Modbus scripts.
+Python SAJ Inverter Modbus scripts.
