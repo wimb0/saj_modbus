@@ -6,9 +6,9 @@ from pymodbus.payload import BinaryPayloadDecoder
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-h', '--host', help="SAJ Inverter IP",
+parser.add_argument('--host', help="SAJ Inverter IP",
                     type=str, required=True)
-parser.add_argument('-p', '--port', help="SAJ Inverter Port",
+parser.add_argument('--port', help="SAJ Inverter Port",
                     type=int, required=True)
 
 args = parser.parse_args()
