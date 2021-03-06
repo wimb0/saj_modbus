@@ -157,4 +157,4 @@ def read_modbus_realtime_data(self):
         return False
 
 
-read_modbus_inverter_data()
+read_modbus_realtime_data()
