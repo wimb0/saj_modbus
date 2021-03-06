@@ -96,7 +96,7 @@ if connected:
 
         data["l3volt"] = round(decoder.decode_16bit_uint() * 0.1, 1)
         data["l3curr"] = round(decoder.decode_16bit_uint() * 0.01, 2)
-        data["l3freq"] = round(l3frdecoder.decode_16bit_uint()eq * 0.01, 2)
+        data["l3freq"] = round(decoder.decode_16bit_uint() * 0.01, 2)
         data["l3dci"] = decoder.decode_16bit_uint()
         data["l3power"] = decoder.decode_16bit_uint()
         data["l3pf"] = round(decoder.decode_16bit_uint() * 0.001, 3)
