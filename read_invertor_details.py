@@ -1,4 +1,5 @@
 import argparse
+import json
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
@@ -31,25 +32,22 @@ if connected:
     if not inverter_data.isError():
         decoder = BinaryPayloadDecoder.fromRegisters(
             inverter_data.registers, byteorder=Endian.Big)
-        print("Device Type: " + str(decoder.decode_16bit_uint()))
-        print("Sub Type: " + str(decoder.decode_16bit_uint()))
-        print("Comms Protocol Version: " +
-              str(round(decoder.decode_16bit_uint() * 0.001, 3)))
-        sn = decoder.decode_string(20).decode('ascii')
-        print("Serial Number: " + str(sn))
-        pc = decoder.decode_string(20).decode('ascii')
-        print("Product Code: " + str(pc))
-        print("Display Software Version: " +
-              str(round(decoder.decode_16bit_uint() * 0.001, 3)))
-        print("Master Ctrl Software Version: " +
-              str(round(decoder.decode_16bit_uint() * 0.001, 3)))
-        print("Slave Ctrl Software Version: " +
-              str(round(decoder.decode_16bit_uint() * 0.001, 3)))
-        print("Display Board Hardware Version: " +
-              str(round(decoder.decode_16bit_uint() * 0.001, 3)))
-        print("Control Board HW Version: " +
-              str(round(decoder.decode_16bit_uint() * 0.001, 3)))
-        print("Power Board Hardware Version: " +
-              str(round(decoder.decode_16bit_uint() * 0.001, 3)))
+
+        data = {}
+
+        data["devicetype"] = str(decoder.decode_16bit_uint())
+        data["subtype"] = str(decoder.decode_16bit_uint())
+        data["commver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
+        data["serialnumber"] = str(decoder.decode_string(20).decode('ascii'))
+        data["procuctcode"] = str(decoder.decode_string(20).decode('ascii'))
+        data["dispswver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
+        data["masterctrlver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
+        data["slavecrtlver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
+        data["disphwver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
+        data["crtlhwver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
+        data["powerhwver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
+
+        json_data = json.dumps(data)
+        print(json_data)
 
 client.close()
