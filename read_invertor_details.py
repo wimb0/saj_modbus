@@ -24,7 +24,7 @@ try:
         unit=1, address=address, count=count)
     connected = True
 except ConnectionException as ex:
-    print(f'Connecting to device {host_ip} failed!')
+    print(f'Connecting to device {args.host} failed!')
     connected = False
 
 if connected:
