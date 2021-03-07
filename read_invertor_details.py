@@ -18,7 +18,7 @@ args = parser.parse_args()
 address = 36608  # First register with Inverter details.
 count = 29  # Read this amount of registers
 connected = False
-client = ModbusTcpClient(host=args.host, port=args.port, timeout=5)
+client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
 client.connect()
 
 try:
