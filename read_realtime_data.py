@@ -48,7 +48,7 @@ if connected:
         data["mpvmode"] = decoder.decode_16bit_uint()
 
         if mpvmode in DEVICE_STATUSSES:
-            data["mpvstatus"] = DEVICE_STATUSSES[mpvmode]
+            data["mpvstatus"] = DEVICE_STATUSSES[data["mpvmode"]]
         else:
             data["mpvstatus"] = "Unknown"
 
