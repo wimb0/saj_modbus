@@ -1,5 +1,6 @@
 import argparse
 import json
+
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
@@ -22,8 +23,8 @@ parser.add_argument('--port', help="SAJ Inverter Port",
 
 args = parser.parse_args()
 
-address = 256 # First register with Realtime data.
-count = 60 # Read this amount of registers
+address = 256  # First register with Realtime data.
+count = 60  # Read this amount of registers
 connected = False
 client = ModbusTcpClient(host=args.host, port=args.port, timeout=5)
 client.connect()
@@ -115,7 +116,7 @@ if connected:
         data["totalhour"] = round(decoder.decode_32bit_uint() * 0.1, 1)
 
         data["errorcount"] = decoder.decode_16bit_uint()
-        
+
         json_data = json.dumps(data)
         print(json_data)
 

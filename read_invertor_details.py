@@ -1,5 +1,6 @@
 import argparse
 import json
+
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
@@ -14,8 +15,8 @@ parser.add_argument('--port', help="SAJ Inverter Port",
 
 args = parser.parse_args()
 
-address = 36608 # First register with Inverter details.
-count = 29 # Read this amount of registers
+address = 36608  # First register with Inverter details.
+count = 29  # Read this amount of registers
 connected = False
 client = ModbusTcpClient(host=args.host, port=args.port, timeout=5)
 client.connect()
@@ -41,8 +42,10 @@ if connected:
         data["serialnumber"] = str(decoder.decode_string(20).decode('ascii'))
         data["procuctcode"] = str(decoder.decode_string(20).decode('ascii'))
         data["dispswver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
-        data["masterctrlver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
-        data["slavecrtlver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
+        data["masterctrlver"] = str(
+            round(decoder.decode_16bit_uint() * 0.001, 3))
+        data["slavecrtlver"] = str(
+            round(decoder.decode_16bit_uint() * 0.001, 3))
         data["disphwver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
         data["crtlhwver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
         data["powerhwver"] = str(round(decoder.decode_16bit_uint() * 0.001, 3))
