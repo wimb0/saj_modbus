@@ -1,5 +1,4 @@
 import argparse
-import json
 
 from pymodbus.client.sync import ModbusTcpClient
 from pymodbus.constants import Endian
@@ -15,8 +14,8 @@ parser.add_argument('--port', help="SAJ Inverter Port",
 
 args = parser.parse_args()
 
-address = 0x0101  # First register with Inverter details.
-count = 6 # Read this amount of registers
+address = 0x0101  # First register with Inverter errors.
+count = 6  # Read this amount of registers
 connected = False
 client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
 client.connect()
@@ -128,12 +127,12 @@ if connected:
         faultMsg2 = decoder.decode_32bit_uint()
 
         print("faultMsg "
-            + "{0:#010x}".format(faultMsg0)
-            + " "
-            + "{0:#010x}".format(faultMsg1)
-            + " "
-            + "{0:#010x}".format(faultMsg2)
-        )
+              + "{0:#010x}".format(faultMsg0)
+              + " "
+              + "{0:#010x}".format(faultMsg1)
+              + " "
+              + "{0:#010x}".format(faultMsg2)
+              )
 
         faultMsg = []
         if faultMsg0:
@@ -152,8 +151,8 @@ if connected:
         error = ", ".join(faultMsg)
 
         if error:
-           print("Fault message: " + error)
+            print("Fault message: " + error)
         else:
-           print("No faults")
+            print("No faults")
 
 client.close()
