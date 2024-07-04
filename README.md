@@ -1,5 +1,5 @@
 # saj_modbus
-Python SAJ Inverter Modbus scripts.
+Python SAJ R5 Inverter Modbus scripts.
 
 **Usage:**
 
