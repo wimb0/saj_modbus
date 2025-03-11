@@ -105,7 +105,7 @@ def read_inverter_errors(client: ModbusTcpClient, address: int, count: int) -> l
         return []
     return inverter_data.registers
 
-def parse_fault_messages(registers: list) -> str:
+def parse_fault_messages(registers: list[int]) -> str:
     """Parse the fault messages from the registers."""
     faultMsg = []
     faultMsg0 = registers[0] << 16 | registers[1]
@@ -122,7 +122,7 @@ def parse_fault_messages(registers: list) -> str:
 
     return ", ".join(faultMsg)
 
-def main():
+def main() -> None:
     """Main function to read and display inverter error messages."""
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', help="SAJ Inverter IP", type=str, required=True)
@@ -132,17 +132,18 @@ def main():
     client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
     client.connect()
 
-    registers = read_inverter_errors(client, address=0x0101, count=6)
-    client.close()
-
-    if registers:
-        error = parse_fault_messages(registers)
-        if error:
-            logging.info(f"Fault message: {error}")
+    try:
+        registers = read_inverter_errors(client, address=0x0101, count=6)
+        if registers:
+            error = parse_fault_messages(registers)
+            if error:
+                logging.info(f"Fault message: {error}")
+            else:
+                logging.info("No faults")
         else:
-            logging.info("No faults")
-    else:
-        logging.error("Failed to read inverter errors")
+            logging.error("Failed to read inverter errors")
+    finally:
+        client.close()
 
 if __name__ == "__main__":
     main()
