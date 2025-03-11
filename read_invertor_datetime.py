@@ -5,7 +5,7 @@ from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ConnectionException
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 def main():
