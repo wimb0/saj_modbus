@@ -3,7 +3,7 @@ import argparse
 from pymodbus.client import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
-from pymodbus.payload import BinaryPayloadDecoder
+from .payload import BinaryPayloadDecoder
 
 parser = argparse.ArgumentParser()
 
