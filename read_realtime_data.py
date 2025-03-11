@@ -81,7 +81,7 @@ def main():
     parser.add_argument('--port', help="SAJ Inverter Port", type=int, required=True)
     args = parser.parse_args()
 
-    address = 256  # First register with Realtime data.
+    address = 0x100  # First register with Realtime data.
     count = 56  # Read this amount of registers
 
     client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
