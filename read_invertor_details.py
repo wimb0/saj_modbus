@@ -1,33 +1,28 @@
 import argparse
 import json
+import logging
 from pymodbus.client import ModbusTcpClient
-from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--host', help="SAJ Inverter IP", type=str, required=True)
-    parser.add_argument('--port', help="SAJ Inverter Port", type=int, required=True)
-    args = parser.parse_args()
+# Constants
+ADDRESS = 36608  # First register with Inverter details
+COUNT = 29  # Number of registers to read
 
-    address = 36608  # First register with Inverter details.
-    count = 29  # Read this amount of registers
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-    client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
-    client.connect()
-
+def read_inverter_data(client, address, count):
     try:
         inverter_data = client.read_holding_registers(slave=1, address=address, count=count)
         if inverter_data.isError():
             raise ConnectionException("Error reading registers")
+        return inverter_data.registers
     except ConnectionException as ex:
-        print(f'Connecting to device {args.host} failed: {ex}')
-        return
-    finally:
-        client.close()
+        logging.error(f'Connecting to device failed: {ex}')
+        return None
 
-    registers = inverter_data.registers
-    data = {
+def parse_registers(registers):
+    return {
         "devicetype": str(registers[0]),
         "subtype": str(registers[1]),
         "commver": str(round(registers[2] * 0.001, 3)),
@@ -41,8 +36,22 @@ def main():
         "powerhwver": str(round(registers[28] * 0.001, 3))
     }
 
-    json_data = json.dumps(data)
-    print(json_data)
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--host', help="SAJ Inverter IP", type=str, required=True)
+    parser.add_argument('--port', help="SAJ Inverter Port", type=int, required=True)
+    args = parser.parse_args()
+
+    client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
+    client.connect()
+
+    registers = read_inverter_data(client, ADDRESS, COUNT)
+    client.close()
+
+    if registers is not None:
+        data = parse_registers(registers)
+        json_data = json.dumps(data)
+        print(json_data)
 
 if __name__ == "__main__":
     main()
