@@ -5,7 +5,7 @@ from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ConnectionException
 
 # Constants
-ADDRESS = 36608  # First register with Inverter details
+ADDRESS = 0x8F00  # First register with Inverter details
 COUNT = 29  # Number of registers to read
 
 # Configure logging
