@@ -138,8 +138,10 @@ def main() -> None:
             error = parse_fault_messages(registers)
             if error:
                 logging.info(f"Fault message: {error}")
+                print(f"Fault message: {error}")
             else:
                 logging.info("No faults")
+                print("No faults")
         else:
             logging.error("Failed to read inverter errors")
     finally:
