@@ -4,7 +4,8 @@ import logging
 from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ConnectionException
 
-logging.basicConfig(level=logging.INFO)
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 DEVICE_STATUSSES = {
     0: "Not Connected",
