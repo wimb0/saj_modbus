@@ -28,9 +28,9 @@ def parse_registers(registers):
     data = {
         "mpvmode": registers[0],
         "mpvstatus": DEVICE_STATUSSES.get(registers[0], "Unknown"),
-        "pv1volt": round(registers[5] * 0.1, 1),
-        "pv1curr": round(registers[6] * 0.01, 2),
-        "pv1power": round(registers[7] * 1, 0),
+        "pv1volt": round(registers[7] * 0.1, 1),
+        "pv1curr": round(registers[8] * 0.01, 2),
+        "pv1power": round(registers[9] * 1, 0),
         "pv2volt": round(registers[9] * 0.1, 1),
         "pv2curr": round(registers[10] * 0.01, 2),
         "pv2power": round(registers[11] * 1, 0),
