@@ -66,11 +66,11 @@ def parse_registers(registers):
         "iso3": registers[42],
         "iso4": registers[43],
         "todayenergy": round(registers[44] * 0.01, 2),
-        "monthenergy": round((registers[45] << 16 | registers[45]) * 0.01, 2),
-        "yearenergy": round((registers[47] << 16 | registers[47]) * 0.01, 2),
-        "totalenergy": round((registers[49] << 16 | registers[49]) * 0.01, 2),
+        "monthenergy": round((registers[45] << 16 | registers[46]) * 0.01, 2),
+        "yearenergy": round((registers[47] << 16 | registers[48]) * 0.01, 2),
+        "totalenergy": round((registers[49] << 16 | registers[50]) * 0.01, 2),
         "todayhour": round(registers[51] * 0.1, 1),
-        "totalhour": round((registers[52] << 16 | registers[52]) * 0.1, 1),
+        "totalhour": round((registers[52] << 16 | registers[53]) * 0.1, 1),
         "errorcount": registers[54]
     }
     return data
