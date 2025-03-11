@@ -4,7 +4,7 @@ import json
 from pymodbus.client import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
-from pymodbus.payload import BinaryPayloadDecoder
+from .payload import BinaryPayloadDecoder
 
 DEVICE_STATUSSES = {
     0: "Not Connected",
