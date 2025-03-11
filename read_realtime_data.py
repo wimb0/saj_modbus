@@ -69,9 +69,9 @@ def parse_registers(registers):
         "monthenergy": round((registers[45] << 16 | registers[45]) * 0.01, 2),
         "yearenergy": round((registers[46] << 16 | registers[47]) * 0.01, 2),
         "totalenergy": round((registers[47] << 16 | registers[49]) * 0.01, 2),
-        "todayhour": round(registers[50] * 0.1, 1),
-        "totalhour": round((registers[51] << 16 | registers[52]) * 0.1, 1),
-        "errorcount": registers[53]
+        "todayhour": round(registers[48] * 0.1, 1),
+        "totalhour": round((registers[49] << 16 | registers[52]) * 0.1, 1),
+        "errorcount": registers[50]
     }
     return data
 
