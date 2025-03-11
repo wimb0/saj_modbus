@@ -4,7 +4,7 @@ import json
 from pymodbus.client import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
-from .payload import BinaryPayloadDecoder
+from payload import BinaryPayloadDecoder
 
 parser = argparse.ArgumentParser()
 
