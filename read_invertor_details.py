@@ -4,7 +4,7 @@ import json
 from pymodbus.client import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
-from payload import BinaryPayloadDecoder
+from pymodbus.payload import BinaryPayloadDecoder
 
 parser = argparse.ArgumentParser()
 
@@ -32,7 +32,7 @@ except ConnectionException as ex:
 if connected:
     if not inverter_data.isError():
         decoder = BinaryPayloadDecoder.fromRegisters(
-            inverter_data.registers, byteorder=Endian.Big)
+            inverter_data.registers, byteorder=Endian.BIG)
 
         data = {}
 
