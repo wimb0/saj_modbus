@@ -82,7 +82,7 @@ def main():
     args = parser.parse_args()
 
     address = 256  # First register with Realtime data.
-    count = 60  # Read this amount of registers
+    count = 56  # Read this amount of registers
 
     client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
     if not client.connect():
