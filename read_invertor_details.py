@@ -23,7 +23,7 @@ client.connect()
 
 try:
     inverter_data = client.read_holding_registers(
-        unit=1, address=address, count=count)
+        slave=1, address=address, count=count)
     connected = True
 except ConnectionException as ex:
     print(f'Connecting to device {args.host} failed!')
