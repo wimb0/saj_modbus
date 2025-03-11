@@ -1,24 +1,6 @@
 import argparse
-
 from pymodbus.client import ModbusTcpClient
-from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
-from pymodbus.payload import BinaryPayloadDecoder
-
-parser = argparse.ArgumentParser()
-
-parser.add_argument('--host', help="SAJ Inverter IP",
-                    type=str, required=True)
-parser.add_argument('--port', help="SAJ Inverter Port",
-                    type=int, required=True)
-
-args = parser.parse_args()
-
-address = 0x0101  # First register with Inverter errors.
-count = 6  # Read this amount of registers
-connected = False
-client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
-client.connect()
 
 FAULT_MESSAGES = {
     0: {
@@ -109,50 +91,64 @@ FAULT_MESSAGES = {
 }
 
 
-try:
-    inverter_data = client.read_holding_registers(
-        slave=1, address=address, count=count)
-    connected = True
-except ConnectionException as ex:
-    print(f'Connecting to device {args.host} failed!')
-    connected = False
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--host', help="SAJ Inverter IP", type=str, required=True)
+    parser.add_argument('--port', help="SAJ Inverter Port", type=int, required=True)
+    args = parser.parse_args()
 
-if connected:
-    if not inverter_data.isError():
-        decoder = BinaryPayloadDecoder.fromRegisters(
-            inverter_data.registers, byteorder=Endian.BIG)
+    address = 0x0101  # First register with Inverter errors.
+    count = 6  # Read this amount of registers
 
-        faultMsg0 = decoder.decode_32bit_uint()
-        faultMsg1 = decoder.decode_32bit_uint()
-        faultMsg2 = decoder.decode_32bit_uint()
+    client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
+    client.connect()
 
-        print("faultMsg "
-              + "{0:#010x}".format(faultMsg0)
-              + " "
-              + "{0:#010x}".format(faultMsg1)
-              + " "
-              + "{0:#010x}".format(faultMsg2)
-              )
+    try:
+        inverter_data = client.read_holding_registers(slave=1, address=address, count=count)
+        if inverter_data.isError():
+            raise ConnectionException("Error reading registers")
+    except ConnectionException as ex:
+        print(f'Connecting to device {args.host} failed: {ex}')
+        return
+    finally:
+        client.close()
 
-        faultMsg = []
-        if faultMsg0:
-            for code, mesg in FAULT_MESSAGES[0].items():
-                if faultMsg0 & code:
-                    faultMsg.append(mesg)
-        if faultMsg1:
-            for code, mesg in FAULT_MESSAGES[1].items():
-                if faultMsg1 & code:
-                    faultMsg.append(mesg)
-        if faultMsg2:
-            for code, mesg in FAULT_MESSAGES[2].items():
-                if faultMsg2 & code:
-                    faultMsg.append(mesg)
+    registers = inverter_data.registers
 
-        error = ", ".join(faultMsg)
+    faultMsg0 = registers[0] << 16 | registers[1]
+    faultMsg1 = registers[2] << 16 | registers[3]
+    faultMsg2 = registers[4] << 16 | registers[5]
 
-        if error:
-            print("Fault message: " + error)
-        else:
-            print("No faults")
+    print("faultMsg "
+          + "{0:#010x}".format(faultMsg0)
+          + " "
+          + "{0:#010x}".format(faultMsg1)
+          + " "
+          + "{0:#010x}".format(faultMsg2)
+          )
 
-client.close()
+    faultMsg = []
+    if faultMsg0:
+        for code, mesg in FAULT_MESSAGES[0].items():
+            if faultMsg0 & code:
+                faultMsg.append(mesg)
+    if faultMsg1:
+        for code, mesg in FAULT_MESSAGES[1].items():
+            if faultMsg1 & code:
+                faultMsg.append(mesg)
+    if faultMsg2:
+        for code, mesg in FAULT_MESSAGES[2].items():
+            if faultMsg2 & code:
+                faultMsg.append(mesg)
+
+    error = ", ".join(faultMsg)
+
+    if error:
+        print("Fault message: " + error)
+    else:
+        print("No faults")
+
+if __name__ == "__main__":
+    main()
+
+
