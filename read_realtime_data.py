@@ -4,7 +4,7 @@ import json
 from pymodbus.client import ModbusTcpClient
 from pymodbus.constants import Endian
 from pymodbus.exceptions import ConnectionException
-from .payload import BinaryPayloadDecoder
+from pymodbus.payload import BinaryPayloadDecoder
 
 DEVICE_STATUSSES = {
     0: "Not Connected",
@@ -40,7 +40,7 @@ except ConnectionException as ex:
 if connected:
     if not realtime_data.isError():
         decoder = BinaryPayloadDecoder.fromRegisters(
-            realtime_data.registers, byteorder=Endian.Big
+            realtime_data.registers, byteorder=Endian.BIG
         )
 
         data = {}
