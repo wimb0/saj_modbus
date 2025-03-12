@@ -153,7 +153,7 @@ def main() -> None:
         allregisters = read_inverter_registers(client, address=0xB00, count=100)
         sub_arrays = [allregisters[i:i+10] for i in range(0, len(allregisters), 10)]
         for index, sub_array in enumerate(sub_arrays):
-            print(f"Error {index + 1}")
+            errornumber = {index + 1}
             timeregisters = sub_array[0:4]
             if timeregisters:
                 datetime = parse_datetime(timeregisters)
@@ -176,7 +176,7 @@ def main() -> None:
                 logging.error("Failed to read inverter error details")
                 
             data = {
-                "error":  {index + 1},
+                "error":  errornumber,
                 "datetime": datetime,
                 "faultmessage": errormsg
             }
