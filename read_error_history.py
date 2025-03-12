@@ -124,7 +124,7 @@ def parse_fault_messages(registers: list[int]) -> str:
 
 def parse_datetime (registers: list[int]) -> str:
     """Extract date and time values from registers."""
-    print(registers)
+
     year = registers[0]  # yyyy
     month = registers[1] >> 8  # MM
     day = registers[1] & 0xFF  # dd
