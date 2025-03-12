@@ -43,7 +43,14 @@ def read_modbus_data(client, address, count):
     except ConnectionException as ex:
         logging.error(f'Error reading registers: {ex}')
         return None
-
+        
+def convert_to_signed(value):
+    """Convert unsigned integers to signed integers."""
+    if value >= 0x8000:
+        return value - 0x10000
+    else:
+        return value
+            
 def parse_registers(registers):
     data = {
         "mpvmode": registers[0],
@@ -59,28 +66,28 @@ def parse_registers(registers):
         "pv3power": round(registers[15] * 1, 0),
         "busvolt": round(registers[16] * 0.1, 1),
         "invtempc": round(registers[17] * 0.1, 1),
-        "gfci": registers[18],
+        "gfci": convert_to_signed(registers[18]),
         "power": registers[19],
-        "qpower": registers[20],
-        "pf": round(registers[21] * 0.001, 3),
+        "qpower": convert_to_signed(registers[20]),
+        "pf": round(convert_to_signed(registers[21]) * 0.001, 3),
         "l1volt": round(registers[22] * 0.1, 1),
         "l1curr": round(registers[23] * 0.01, 2),
         "l1freq": round(registers[24] * 0.01, 2),
-        "l1dci": registers[25],
+        "l1dci": convert_to_signed(registers[25]),
         "l1power": registers[26],
-        "l1pf": round(registers[27] * 0.001, 3),
+        "l1pf": round(convert_to_signed(registers[27]) * 0.001, 3),
         "l2volt": round(registers[28] * 0.1, 1),
         "l2curr": round(registers[29] * 0.01, 2),
         "l2freq": round(registers[30] * 0.01, 2),
-        "l2dci": registers[31],
+        "l2dci": convert_to_signed(registers[31]),
         "l2power": registers[32],
-        "l2pf": round(registers[33] * 0.001, 3),
+        "l2pf": round(convert_to_signed(registers[33]) * 0.001, 3),
         "l3volt": round(registers[34] * 0.1, 1),
         "l3curr": round(registers[35] * 0.01, 2),
         "l3freq": round(registers[36] * 0.01, 2),
-        "l3dci": registers[37],
+        "l3dci": convert_to_signed(registers[37]),
         "l3power": registers[38],
-        "l3pf": round(registers[39] * 0.001, 3),
+        "l3pf": round(convert_to_signed(registers[39]) * 0.001, 3),
         "iso1": registers[40],
         "iso2": registers[41],
         "iso3": registers[42],
