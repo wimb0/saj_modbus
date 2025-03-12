@@ -168,7 +168,7 @@ def main() -> None:
             if errorregisters:
                 #parse_datetime(registers[0..4])
                 errormsg = parse_fault_messages(errorregisters)
-                if error:
+                if errormsg:
                     logging.info(f"Fault message: {errormsg}")
                 else:
                     logging.info("No faults")
