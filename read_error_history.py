@@ -156,7 +156,7 @@ def main() -> None:
         for index, sub_array in enumerate(sub_arrays):
             errornumber = index + 1
 
-            if sub_array[0] == 65535
+            if sub_array[0] == 65535:
                 logging.info("No more error data")
             else:
                 timeregisters = sub_array[0:4]
