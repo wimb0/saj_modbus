@@ -149,9 +149,9 @@ def main() -> None:
     client.connect()
     
     try:
-        allregisters = read_inverter_registers(client, address=0xB00, count=4)
+        allregisters = read_inverter_registers(client, address=0xB00, count=10)
 
-        timeregisters = allregisters
+        timeregisters = allregisters[0:3]
         if timeregisters:
             datetime = parse_datetime(timeregisters)
             if datetime:
