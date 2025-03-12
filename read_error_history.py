@@ -94,7 +94,7 @@ FAULT_MESSAGES = {
     },
 }
 
-def read_inverter_errors(client: ModbusTcpClient, address: int, count: int) -> list:
+def read_inverter_registers(client: ModbusTcpClient, address: int, count: int) -> list:
     """Read inverter error registers and return the fault messages."""
     try:
         inverter_data = client.read_holding_registers(slave=1, address=address, count=count)
@@ -145,12 +145,26 @@ def main() -> None:
 
     client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
     client.connect()
-
+    startaddress = 0xB00
+    
     try:
-        registers = read_inverter_errors(client, address=0xB04, count=10)
-        if registers:
+        timeregisters = read_inverter_registers(client, address=0xB00, count=4)
+        if timeregisters:
             #parse_datetime(registers[0..4])
-            error = parse_fault_messages(registers)
+            datetime = parse_datetime(timeregisters)
+            if datetime:
+                logging.info(f"Fault time: {datetime}")
+                print(f"Fault time: {datetime}")
+            else:
+                logging.info("No faults")
+                print("No faults")
+        else:
+            logging.error("Failed to read inverter errors")
+        
+        errorregisters = read_inverter_registers(client, address=0xB04, count=6)
+        if errorregisters:
+            #parse_datetime(registers[0..4])
+            error = parse_fault_messages(errorregisters)
             if error:
                 logging.info(f"Fault message: {error}")
                 print(f"Fault message: {error}")
