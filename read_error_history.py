@@ -132,7 +132,7 @@ def parse_datetime (registers: list[int]) -> str:
     second = registers[3] >> 8  # ss
     
     timevalues = f"{year}{month:02}{day:02}{hour:02}{minute:02}{second:02}"
-    logging.info(f"DateTime {ftimevalues}")
+    logging.info(f"DateTime {timevalues}")
 
     return(timevalues)
 
