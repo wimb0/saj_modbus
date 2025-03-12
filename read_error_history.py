@@ -155,35 +155,38 @@ def main() -> None:
         sub_arrays = [allregisters[i:i+10] for i in range(0, len(allregisters), 10)]
         for index, sub_array in enumerate(sub_arrays):
             errornumber = index + 1
-            
-            timeregisters = sub_array[0:4]
-            if timeregisters:
-                datetime = parse_datetime(timeregisters)
-                if datetime:
-                    logging.info(f"Fault time: {datetime}")
-                else:
-                    logging.info("No faults")
+
+            if sub_array[0] == 65535
+                logging.info("No more error data")
             else:
-                logging.error("Failed to read inverter error time")
-            
-            errorregisters = sub_array[4:10]
-            if errorregisters:
-                errormsg = parse_fault_messages(errorregisters)
-                if errormsg:
-                    logging.info(f"Fault message: {errormsg}")
+                timeregisters = sub_array[0:4]
+                if timeregisters:
+                    datetime = parse_datetime(timeregisters)
+                    if datetime:
+                        logging.info(f"Fault datetime: {datetime}")
+                    else:
+                        logging.info("No datetime")
                 else:
-                    logging.info("No faults")
-            else:
-                logging.error("Failed to read inverter error details")
+                    logging.error("Failed to read inverter error time")
                 
-            data = {
-                "error": errornumber,
-                "datetime": datetime,
-                "faultmessage": errormsg
-            }
-            
-            json_data = json.dumps(data)
-            print(json_data)
+                errorregisters = sub_array[4:10]
+                if errorregisters:
+                    errormsg = parse_fault_messages(errorregisters)
+                    if errormsg:
+                        logging.info(f"Fault message: {errormsg}")
+                    else:
+                        logging.info("No faults")
+                else:
+                    logging.error("Failed to read inverter error details")
+                    
+                data = {
+                    "error": errornumber,
+                    "datetime": datetime,
+                    "faultmessage": errormsg
+                }
+                
+                json_data = json.dumps(data)
+                print(json_data)
     finally:
         client.close()
 
