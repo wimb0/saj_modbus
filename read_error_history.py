@@ -147,7 +147,7 @@ def main() -> None:
     client.connect()
 
     try:
-        registers = read_inverter_errors(client, address=0xB00, count=10)
+        registers = read_inverter_errors(client, address=0xB04, count=10)
         if registers:
             #parse_datetime(registers[0..4])
             error = parse_fault_messages(registers)
