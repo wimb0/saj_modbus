@@ -3,6 +3,7 @@ import json
 import logging
 from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ConnectionException
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -15,6 +16,24 @@ DEVICE_STATUSSES = {
     4: "Upgrading",
 }
 
+def parse_datetime (registers: list[int]) -> str:
+    """Extract date and time values from registers."""
+
+    year = registers[0]  # yyyy
+    month = registers[1] >> 8  # MM
+    day = registers[1] & 0xFF  # dd
+    hour = registers[2] >> 8  # HH
+    minute = registers[2] & 0xFF  # mm
+    second = registers[3] >> 8  # ss
+    
+    timevalues = f"{year}{month:02}{day:02}{hour:02}{minute:02}{second:02}"
+    # Convert to datetime object
+    date_time_obj = datetime.strptime(timevalues, '%Y%m%d%H%M%S')
+    
+    # Format to readable string
+    readable_date_time = str(date_time_obj.strftime('%Y-%m-%d %H:%M:%S'))
+    return(readable_date_time)
+    
 def read_modbus_data(client, address, count):
     try:
         result = client.read_holding_registers(slave=1, address=address, count=count)
@@ -72,7 +91,8 @@ def parse_registers(registers):
         "totalenergy": round((registers[49] << 16 | registers[50]) * 0.01, 2),
         "todayhour": round(registers[51] * 0.1, 1),
         "totalhour": round((registers[52] << 16 | registers[53]) * 0.1, 1),
-        "errorcount": registers[54]
+        "errorcount": registers[54],
+        "datetime": parse_datetime(registers[55:60])
     }
     return data
 
@@ -83,7 +103,7 @@ def main():
     args = parser.parse_args()
 
     address = 0x100  # First register with Realtime data.
-    count = 56  # Read this amount of registers
+    count = 60  # Read this amount of registers
 
     client = ModbusTcpClient(host=args.host, port=args.port, timeout=3)
     if not client.connect():
