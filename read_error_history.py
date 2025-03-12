@@ -122,6 +122,20 @@ def parse_fault_messages(registers: list[int]) -> str:
 
     return ", ".join(faultMsg)
 
+def parse_datetime (registers: list[int]) -> str:
+    # Extract date and time values from registers
+    year = registers[0]  # yyyy
+    month = registers[1] >> 8  # MM
+    day = registers[1] & 0xFF  # dd
+    hour = registers[2] >> 8  # HH
+    minute = registers[2] & 0xFF  # mm
+    second = registers[3] >> 8  # ss
+    
+    timevalues = f"{year}{month:02}{day:02}{hour:02}{minute:02}{second:02}"
+    logging.info(f"DateTime {ftimevalues}")
+
+    return(timevalues)
+
 def main() -> None:
     """Main function to read and display inverter error messages."""
     parser = argparse.ArgumentParser()
@@ -133,8 +147,9 @@ def main() -> None:
     client.connect()
 
     try:
-        registers = read_inverter_errors(client, address=0xB04, count=10)
+        registers = read_inverter_errors(client, address=0xB00, count=10)
         if registers:
+            parse_datetime(registers[0..4])
             error = parse_fault_messages(registers)
             if error:
                 logging.info(f"Fault message: {error}")
