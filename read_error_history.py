@@ -150,7 +150,7 @@ def main() -> None:
     try:
         allregisters = read_inverter_registers(client, address=0xB00, count=4)
 
-        timeregisters = allregisters[]
+        timeregisters = allregisters
         if timeregisters:
             datetime = parse_datetime(timeregisters)
             if datetime:
