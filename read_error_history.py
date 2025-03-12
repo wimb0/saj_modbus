@@ -149,32 +149,33 @@ def main() -> None:
     client.connect()
     
     try:
-        allregisters = read_inverter_registers(client, address=0xB00, count=10)
-
-        timeregisters = allregisters[0:4]
-        if timeregisters:
-            datetime = parse_datetime(timeregisters)
-            if datetime:
-                logging.info(f"Fault time: {datetime}")
-                print(f"Fault time: {datetime}")
+        allregisters = read_inverter_registers(client, address=0xB00, count=100)
+        sub_arrays = [allregisters[i:i+10] for i in range(0, len(allregisters), 10)]
+        for index, sub_array in enumerate(sub_arrays):
+            timeregisters = sub_array[0:4]
+            if timeregisters:
+                datetime = parse_datetime(timeregisters)
+                if datetime:
+                    logging.info(f"Fault time: {datetime}")
+                    print(f"Fault time: {datetime}")
+                else:
+                    logging.info("No faults")
+                    print("No faults")
             else:
-                logging.info("No faults")
-                print("No faults")
-        else:
-            logging.error("Failed to read inverter error time")
-        
-        errorregisters = allregisters[4:10]
-        if errorregisters:
-            #parse_datetime(registers[0..4])
-            error = parse_fault_messages(errorregisters)
-            if error:
-                logging.info(f"Fault message: {error}")
-                print(f"Fault message: {error}")
+                logging.error("Failed to read inverter error time")
+            
+            errorregisters = sub_array[4:10]
+            if errorregisters:
+                #parse_datetime(registers[0..4])
+                error = parse_fault_messages(errorregisters)
+                if error:
+                    logging.info(f"Fault message: {error}")
+                    print(f"Fault message: {error}")
+                else:
+                    logging.info("No faults")
+                    print("No faults")
             else:
-                logging.info("No faults")
-                print("No faults")
-        else:
-            logging.error("Failed to read inverter error details")
+                logging.error("Failed to read inverter error details")
     finally:
         client.close()
 
