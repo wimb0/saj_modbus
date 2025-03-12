@@ -2,6 +2,7 @@ import argparse
 import logging
 from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ConnectionException
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
