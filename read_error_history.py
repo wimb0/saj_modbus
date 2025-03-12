@@ -136,7 +136,7 @@ def parse_datetime (registers: list[int]) -> str:
     date_time_obj = datetime.strptime(timevalues, '%Y%m%d%H%M%S')
     
     # Format to readable string
-    readable_date_time = date_time_obj.strftime('%Y-%m-%d %H:%M:%S')
+    readable_date_time = str(date_time_obj.strftime('%Y-%m-%d %H:%M:%S'))
     return(readable_date_time)
 
 def main() -> None:
@@ -166,7 +166,6 @@ def main() -> None:
             
             errorregisters = sub_array[4:10]
             if errorregisters:
-                #parse_datetime(registers[0..4])
                 errormsg = parse_fault_messages(errorregisters)
                 if errormsg:
                     logging.info(f"Fault message: {errormsg}")
@@ -176,7 +175,7 @@ def main() -> None:
                 logging.error("Failed to read inverter error details")
                 
             data = {
-                "error":  errornumber,
+                "error": errornumber,
                 "datetime": datetime,
                 "faultmessage": errormsg
             }
