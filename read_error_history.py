@@ -163,7 +163,7 @@ def main() -> None:
         else:
             logging.error("Failed to read inverter error time")
         
-        errorregisters = read_inverter_registers(client, address=0xB04, count=6)
+        errorregisters = allregisters[4:10]
         if errorregisters:
             #parse_datetime(registers[0..4])
             error = parse_fault_messages(errorregisters)
