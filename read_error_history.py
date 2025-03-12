@@ -3,6 +3,7 @@ import logging
 from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ConnectionException
 from datetime import datetime
+import json
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -158,25 +159,30 @@ def main() -> None:
                 datetime = parse_datetime(timeregisters)
                 if datetime:
                     logging.info(f"Fault time: {datetime}")
-                    print(f"Fault time: {datetime}")
                 else:
                     logging.info("No faults")
-                    print("No faults")
             else:
                 logging.error("Failed to read inverter error time")
             
             errorregisters = sub_array[4:10]
             if errorregisters:
                 #parse_datetime(registers[0..4])
-                error = parse_fault_messages(errorregisters)
+                errormsg = parse_fault_messages(errorregisters)
                 if error:
-                    logging.info(f"Fault message: {error}")
-                    print(f"Fault message: {error}")
+                    logging.info(f"Fault message: {errormsg}")
                 else:
                     logging.info("No faults")
-                    print("No faults")
             else:
                 logging.error("Failed to read inverter error details")
+                
+            data = {
+                "error":  {index + 1},
+                "datetime": datetime,
+                "faultmessage": errormsg
+            }
+            
+            json_data = json.dumps(data)
+            print(json_data)
     finally:
         client.close()
 
