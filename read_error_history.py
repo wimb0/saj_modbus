@@ -6,7 +6,7 @@ from datetime import datetime
 import json
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(levelname)s - %(message)s')
 
 FAULT_MESSAGES = {
     0: {
