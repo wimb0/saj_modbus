@@ -29,10 +29,11 @@ def set_date_and_time(date_time: datetime | None = None) -> None:
 
 def read_date_and_time(client):
     """Extract date and time values from registers."""
-    registers = client.read_holding_registers(slave=1, address=0x0137, count=4)
-    if registers.isError():
+    timedata = client.read_holding_registers(slave=1, address=0x0137, count=4)
+    if timedata.isError():
         raise ConnectionException("Error reading registers")
-        
+    registers = timedata.registers
+    
     year = registers[0]  # yyyy
     month = registers[1] >> 8  # MM
     day = registers[1] & 0xFF  # dd
