@@ -9,7 +9,7 @@ Read available realtime data:
 Read inverter details, like serial number, model, software version etc.: 
 `python3 read_inverter_details.py --host 0.0.0.0 --port 0`
 
-Read error state from the inverter: 
+Read current error state from the inverter: 
 `python3 read_inverter_current_error.py --host 0.0.0.0 --port 0`
 
 Read last 10 errors from the inverter: 
