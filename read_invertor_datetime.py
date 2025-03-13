@@ -29,8 +29,8 @@ def set_date_and_time(date_time: datetime | None = None) -> None:
 
 def read_date_and_time(client):
     """Extract date and time values from registers."""
-    timedata_data = client.read_holding_registers(slave=1, address=0x0137, count=4)
-    if timedata_data.isError():
+    registers = client.read_holding_registers(slave=1, address=0x0137, count=4)
+    if registers.isError():
         raise ConnectionException("Error reading registers")
         
     year = registers[0]  # yyyy
