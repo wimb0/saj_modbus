@@ -27,7 +27,7 @@ def set_date_and_time(date_time: datetime | None = None) -> None:
         raise ModbusException("Error setting date and time")
     return(response)
 
-def read_date_and_time:
+def read_date_and_time():
     """Extract date and time values from registers."""
     timedata_data = client.read_holding_registers(slave=1, address=0x0137, count=4)
     if timedata_data.isError():
