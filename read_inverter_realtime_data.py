@@ -3,7 +3,7 @@ import json
 import logging
 from pymodbus.client import ModbusTcpClient
 from pymodbus.exceptions import ConnectionException
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -28,7 +28,8 @@ def parse_datetime (registers: list[int]) -> str:
     
     timevalues = f"{year}{month:02}{day:02}{hour:02}{minute:02}{second:02}"
     # Convert to datetime object
-    date_time_obj = datetime.strptime(timevalues, '%Y%m%d%H%M%S')
+    date_time_obj = datetime.astimezone(datetime.strptime(timevalues, '%Y%m%d%H%M%S'))
+
     logging.info(f'DatetimeObj: {date_time_obj}')
     # Format to readable string
     readable_date_time = str(date_time_obj.strftime('%Y-%m-%d %H:%M:%S'))
