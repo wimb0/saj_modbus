@@ -29,7 +29,7 @@ def parse_datetime (registers: list[int]) -> str:
     timevalues = f"{year}{month:02}{day:02}{hour:02}{minute:02}{second:02}"
     # Convert to datetime object
     date_time_obj = datetime.strptime(timevalues, '%Y%m%d%H%M%S')
-    
+    logging.info(f'DatetimeObj: {date_time_obj}')
     # Format to readable string
     readable_date_time = str(date_time_obj.strftime('%Y-%m-%d %H:%M:%S'))
     return(readable_date_time)
