@@ -30,7 +30,7 @@ def parse_datetime (registers: list[int]) -> str:
     # Convert to datetime object
     date_time_obj = datetime.astimezone(datetime.strptime(timevalues, '%Y%m%d%H%M%S'))
 
-    logging.info(f'DatetimeObj: {date_time_obj}')
+    logging.debug(f'DatetimeObj: {date_time_obj}')
     # Format to readable string
     readable_date_time = str(date_time_obj.strftime('%Y-%m-%d %H:%M:%S'))
     return(readable_date_time)
