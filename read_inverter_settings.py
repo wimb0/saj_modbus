@@ -12,6 +12,13 @@ COUNT = 64  # Number of registers to read
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def convert_to_signed(value):
+    """Convert unsigned integers to signed integers."""
+    if value >= 0x8000:
+        return value - 0x10000
+    else:
+        return value
+        
 def read_inverter_data(client: ModbusTcpClient, address: int, count: int) -> Optional[List[int]]:
     try:
         inverter_data = client.read_holding_registers(slave=1, address=address, count=count)
