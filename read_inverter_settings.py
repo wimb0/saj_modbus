@@ -30,16 +30,14 @@ def read_inverter_data(client: ModbusTcpClient, address: int, count: int) -> Opt
         return None
 
 def parse_registers(registers: List[int]) -> Dict[str, str]:
-    def parse_string(registers_slice: List[int]) -> str:
-        return ''.join(chr(registers_slice[i] >> 8) + chr(registers_slice[i] & 0xFF) for i in range(len(registers_slice))).rstrip('\x00')
 
     return {
         "SafetyType": registers[0],
         "FunMask": registers[1],
         "ISOLimit": registers[11],
-        "PowerLimited": round(convert_to_signed(registers[14]) * 0.001, 3),
-        "ReactiveMode": registers[15],
-        "ReactiveValue": round(convert_to_signed(registers[16]) * 0.001, 3),
+        "PowerLimited": round(convert_to_signed(registers[20]) * 0.001, 3),
+        "ReactiveMode": registers[21],
+        "ReactiveValue": round(convert_to_signed(registers[22]) * 0.001, 3),
         "PowerAdjCoff3": registers[41],
         "PVInputMode": registers[56]
     }
