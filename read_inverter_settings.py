@@ -31,7 +31,7 @@ def parse_registers(registers: List[int]) -> Dict[str, str]:
         "FunMask": registers[1],
         "ISOLimit": registers[11],
         "PowerLimited": round(convert_to_signed(registers[14]) * 0.001, 3),
-        "ReactiveMode": registers[15]
+        "ReactiveMode": registers[15],
         "ReactiveValue": round(convert_to_signed(registers[16]) * 0.001, 3),
         "PowerAdjCoff3": registers[41],
         "PVInputMode": registers[56]
