@@ -6,7 +6,7 @@ from pymodbus.exceptions import ConnectionException
 from datetime import datetime
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 DEVICE_STATUSSES = {
     0: "Not Connected",
